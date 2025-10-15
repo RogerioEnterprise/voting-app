@@ -1,32 +1,33 @@
-# base defines a base stage that uses the official python runtime base image
-FROM python:3.11-slim AS base
+# Menggunakan image Python untuk menginstall dependensi
+FROM python:3.9-slim as builder
 
-# Add curl for healthcheck
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends curl && \
-    rm -rf /var/lib/apt/lists/*
+# Menetapkan direktori kerja di dalam container
+WORKDIR /app
 
-# Set the application directory
-WORKDIR /usr/local/app
+# Menyalin file daftar dependensi
+COPY requirements.txt .
 
-# Install our requirements.txt
-COPY requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+# Mengunduh dependensi sebagai 'wheels' (paket terkompilasi)
+# lebih efisien untuk tahap selanjutnya
+RUN pip wheel --no-cache-dir --wheel-dir /wheels -r requirements.txt
 
-# dev defines a stage for development, where it'll watch for filesystem changes
-FROM base AS dev
-RUN pip install watchdog
-ENV FLASK_ENV=development
-CMD ["python", "app.py"]
+# Menggunakan image Python yang jauh lebih kecil untuk produksi
+FROM python:3.9-slim
 
-# final defines the stage that will bundle the application for production
-FROM base AS final
+# Menetapkan direktori kerja
+WORKDIR /app
 
-# Copy our code from the current folder to the working directory inside the container
+# Menyalin 'wheels' yang sudah jadi dari stage 'builder'
+COPY --from=builder /wheels /wheels
+
+# Menyalin kode aplikasi
 COPY . .
 
-# Make port 80 available for links and/or publish
+# Menginstall dependensi dari 'wheels' lokal tanpa perlu download lagi
+RUN pip install --no-cache /wheels/*
+
+# Menentukan port yang akan diekspos oleh container
 EXPOSE 80
 
-# Define our command to be run when launching the container
-CMD ["gunicorn", "app:app", "-b", "0.0.0.0:80", "--log-file", "-", "--access-logfile", "-", "--workers", "4", "--keep-alive", "0"]
+# Perintah untuk menjalankan aplikasi saat container dimulai
+CMD ["python", "app.py"]
