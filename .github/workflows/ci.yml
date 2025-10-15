@@ -1,0 +1,43 @@
+# Nama workflow agar mudah dikenali di tab Actions GitHub
+name: 99Group CI Pipeline
+
+# Pemicu (trigger) workflow
+# Workflow ini akan berjalan setiap kali ada 'push' atau 'pull request'
+# yang ditujukan ke branch 'main'.
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# Daftar pekerjaan yang akan dijalankan
+jobs:
+  build-and-test:
+    # Menentukan bahwa pekerjaan ini akan berjalan di mesin virtual Ubuntu
+    runs-on: ubuntu-latest
+
+    # Menentukan direktori kerja default untuk semua perintah 'run'
+    # Kita fokus pada aplikasi 'vote' yang menggunakan Python
+    defaults:
+      run:
+        working-directory: ./vote
+
+    # Langkah-langkah yang akan dieksekusi secara berurutan
+    steps:
+      # Langkah 1: Mengunduh kode dari repositori Anda ke mesin virtual
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Langkah 2: Menyiapkan lingkungan Python versi 3.9
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      # Langkah 3: Menginstall semua library yang dibutuhkan oleh aplikasi
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # Langkah 4: Menjalankan perintah tes sederhana
+      - name: Run a simple test command 
+        run: echo "Test command would run here if available."
