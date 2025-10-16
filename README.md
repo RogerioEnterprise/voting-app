@@ -1,4 +1,4 @@
-# 99Group Voting App - Role Challenge 
+# 99Group DevOps Internship - Role Challenge 
 
 ## Aplikasi terdiri dari 5 service utama:
 1. Vote: Web berbasis Flask (Python) untuk memberi suara
