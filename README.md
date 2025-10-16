@@ -79,6 +79,15 @@ terraform apply
 
 ---
 
+## Alasan Desain
+1. Multi-stage Build: Image lebih ringan dan aman
+2. Docker Compose Networks: Keamanan antar service
+3. GitHub Actions CI/CD: Otomatisasi testing dan build
+4. Terraform: Infrastruktur reproducible
+5. Alpine Image: Deployment lebih cepat dan efisien
+
+---
+
 ## Rencana Pengembangan Selanjutnya
 - Jangka Pendek (1–2 Minggu)
 
