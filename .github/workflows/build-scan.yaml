@@ -68,28 +68,28 @@ jobs:
           SYSDIG_SECURE_URL: ${{ secrets.SYSDIG_SECURE_URL }}
           SYSDIG_SECURE_TOKEN: ${{ secrets.SYSDIG_SECURE_TOKEN }}
         run: |
-          sysdig-cli-scanner docker.io/$REPO/vote:latest
+          sysdig-cli-scanner -a https://app.us4.sysdig.com/secure pull://docker.io/$REPO/examplevotingapp_vote:latest
 
       - name: Scan worker image
         env:
           SYSDIG_SECURE_URL: ${{ secrets.SYSDIG_SECURE_URL }}
           SYSDIG_SECURE_TOKEN: ${{ secrets.SYSDIG_SECURE_TOKEN }}
         run: |
-          sysdig-cli-scanner docker.io/$REPO/worker:latest
+          sysdig-cli-scanner -a https://app.us4.sysdig.com/secure pull://docker.io/$REPO/examplevotingapp_worker:latest
 
       - name: Scan result image
         env:
           SYSDIG_SECURE_URL: ${{ secrets.SYSDIG_SECURE_URL }}
           SYSDIG_SECURE_TOKEN: ${{ secrets.SYSDIG_SECURE_TOKEN }}
         run: |
-          sysdig-cli-scanner docker.io/$REPO/result:latest
+          sysdig-cli-scanner -a https://app.us4.sysdig.com/secure pull://docker.io/$REPO/examplevotingapp_result:latest
 
       # --- Optional: Push images to Docker Hub (only if scans passed) ---
       - name: Push vote image
-        run: docker push $REGISTRY/$REPO/vote:latest
+        run: docker push $REGISTRY/$REPO/examplevotingapp_vote:latest
 
       - name: Push worker image
-        run: docker push $REGISTRY/$REPO/worker:latest
+        run: docker push $REGISTRY/$REPO/examplevotingapp_worker:latest
 
       - name: Push result image
-        run: docker push $REGISTRY/$REPO/result:latest
+        run: docker push $REGISTRY/$REPO/examplevotingapp_result:latest
