@@ -32,24 +32,24 @@ jobs:
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_TOKEN }}
 
-      # --- Build Containers ---
-      - name: Build vote image
-        run: docker build -t $REGISTRY/$REPO/vote:latest ./vote
+      # # --- Build Containers ---
+      # - name: Build vote image
+      #   run: docker build -t $REGISTRY/$REPO/vote:latest ./vote
 
-      - name: Build worker image
-        run: docker build -t $REGISTRY/$REPO/worker:latest ./worker
+      # - name: Build worker image
+      #   run: docker build -t $REGISTRY/$REPO/worker:latest ./worker
 
-      - name: Build result image
-        run: docker build -t $REGISTRY/$REPO/result:latest ./result
+      # - name: Build result image
+      #   run: docker build -t $REGISTRY/$REPO/result:latest ./result
 
 
-      - name: Install Sysdig CLI Scanner
-        run: |
-          LATEST_VERSION=$(curl -s https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt)
-          curl -Lo sysdig-cli-scanner "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/${LATEST_VERSION}/linux/amd64/sysdig-cli-scanner"
-          chmod +x sysdig-cli-scanner
-          sudo mv sysdig-cli-scanner /usr/local/bin/
-          sysdig-cli-scanner --version
+      # - name: Install Sysdig CLI Scanner
+      #   run: |
+      #     LATEST_VERSION=$(curl -s https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt)
+      #     curl -Lo sysdig-cli-scanner "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/${LATEST_VERSION}/linux/amd64/sysdig-cli-scanner"
+      #     chmod +x sysdig-cli-scanner
+      #     sudo mv sysdig-cli-scanner /usr/local/bin/
+      #     sysdig-cli-scanner --version
 
       # # --- Install Sysdig Scanner ---
       # - name: Install Sysdig CLI Scanner
@@ -75,6 +75,15 @@ jobs:
           echo "REPO = $REPO"
           echo "SYSDIG_SECURE_URL = $SYSDIG_SECURE_URL"
           echo "SYSDIG_SECURE_TOKEN = $SYSDIG_SECURE_TOKEN"
+
+      - name: Scan vote image
+        # env:
+        #   SYSDIG_SECURE_URL: ${{ secrets.SYSDIG_SECURE_URL }}
+        #   SYSDIG_SECURE_TOKEN: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+        run: |
+          export SECURE_API_TOKEN=b7de0bae-8dfd-4bfc-b372-2fb2bdf05918 
+          sysdig-cli-scanner -a https://app.us4.sysdig.com/secure pull://docker.io/dockersamples/examplevotingapp_vote:latest
+
 
       - name: Scan vote image
         env:
