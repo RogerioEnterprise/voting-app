@@ -18,9 +18,9 @@ spec:
       - image: dockersamples/examplevotingapp_vote
         name: vote
         env:
-        - name: VOTE1VALUE
+        - name: OPTION_A 
           value: "Lions"
-        - name: VOTE2VALUE
+        - name: OPTION_B
           value: "Dogs"
         - name: TITLE
           value: "Lions vs Dogs!"
