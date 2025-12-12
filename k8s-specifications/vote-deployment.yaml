@@ -19,11 +19,11 @@ spec:
         name: vote
         env:
         - name: OPTION_A 
-          value: "Lions"
+          value: "Tigers"
         - name: OPTION_B
           value: "Dogs"
         - name: TITLE
-          value: "Lions vs Dogs!"
+          value: "Tigers vs Dogs!"
         ports:
         - containerPort: 80
           name: vote
