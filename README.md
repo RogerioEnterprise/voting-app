@@ -48,6 +48,8 @@ kubectl delete -f k8s-specifications/
 
 ## Architecture
 
+Small changes in architecture
+
 ![Architecture diagram](architecture.excalidraw.png)
 
 * A front-end web app in [Python](/vote) which lets you vote between two options
